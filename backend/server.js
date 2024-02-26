@@ -1,11 +1,19 @@
 import express from "express";
+import dotenv from "dotenv";
+
+import { router } from "./routes/auth.routes.js";
+import { connectionToMongoDB } from "./db/connectDB.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Server saying hello");
-});
+dotenv.config();
+const PORT = process.env.PORT || 5000;
 
-app.listen(3000, () => {
-  console.log("server started at port 300");
+app.use(express.json());
+
+app.use("/api/auth", router);
+
+app.listen(PORT, () => {
+  connectionToMongoDB();
+  console.log(`Server connected at ${PORT}`);
 });
