@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { router } from "./routes/auth.routes.js";
 import { messageRouter } from "./routes/message.routes.js";
 import { connectionToMongoDB } from "./db/connectDB.js";
+import { userRouter } from "./routes/user.routes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", router);
 app.use("/api/messages", messageRouter);
+app.use("/api/users", userRouter);
 
 app.listen(PORT, () => {
   connectionToMongoDB();
