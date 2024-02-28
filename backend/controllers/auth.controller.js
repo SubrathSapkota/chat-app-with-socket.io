@@ -5,16 +5,25 @@ import { generateTokenAndSetCookie } from "../utils/generateJwt.js";
 export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ error: "Please fill the form" });
+    }
+
     const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(400).json({ error: "Username Not Found" });
+    }
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
       user.password || ""
     );
 
-    if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid password" });
     }
+    console.log("test");
 
     generateTokenAndSetCookie(user._id, res);
 
